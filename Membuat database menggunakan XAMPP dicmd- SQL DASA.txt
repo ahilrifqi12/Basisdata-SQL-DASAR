@@ -1,0 +1,95 @@
+Membuat database menggunakan XAMPP dicmd- SQL DASAR 1
+
+- Masuk ke xampp lalu tekan start
+- Pastikan keterangan status change detected: running
+- Buka cmd lalu masuk ke mysql
+
+	C:\Users\USER>cd /xampp/mysql/bin
+
+	C:\xampp\mysql\bin>mysql -u root
+	Welcome to the MariaDB monitor.  Commands end with ; or \g.
+	Your MariaDB connection id is 2
+	Server version: 10.1.36-MariaDB mariadb.org binary distribution
+
+	Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+	Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+- Buat database dengan perintah " CREATE DATABASE [table]; "
+
+	create database latihan1;
+	Query OK, 1 row affected (0.00 sec)
+
+- Cek pake perintah " SHOW DATABASES; "
+
+	MariaDB [(none)]> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| information_schema |
+	| latihan1           |
+	| mysql              |
+	| performance_schema |
+	| phpmyadmin         |
+	| sewamobil          |
+	| test               |
+	+--------------------+
+	7 rows in set (0.00 sec)
+
+- Gunakan perintah " USE <nama database> ; " untuk berpindah ke database yang mau digunakan
+
+	MariaDB [(none)]> use latihan1;
+	Database changed
+
+- Buat tabel dengan perintah " CREATE TABLE mahasiswa(field1 typedata1(ukuran),...fieldn typedatan(ukuran)); "
+
+	MariaDB [latihan1]> CREATE TABLE mahasiswa(nama VARCHAR(15), alamat VARCHAR(30));
+	Query OK, 0 rows affected (1.05 sec)
+
+- Lalu cek menggunakan perintah "DESC <table>;"
+
+	MariaDB [latihan1]> DESC mahasiswa;
+	+--------+-------------+------+-----+---------+-------+
+	| Field  | Type        | Null | Key | Default | Extra |
+	+--------+-------------+------+-----+---------+-------+
+	| nama   | varchar(15) | YES  |     | NULL    |       |
+	| alamat | varchar(30) | YES  |     | NULL    |       |
+	+--------+-------------+------+-----+---------+-------+
+	2 rows in set (0.04 sec) 
+
+- Menambah kolom dengan mengunakan perintah ALTER.
+- Gunakan perintah ALTER TABLE[nama_tabel] ADD COLUMN [nama_field] tipe_data(ukuran)[FIRST|BEFORE|AFTER];
+- Lalu cek
+
+	MariaDB [latihan1]> ALTER TABLE mahasiswa ADD COLUMN nim INT(30)AFTER nama;
+	Query OK, 0 rows affected (0.69 sec)
+	Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [latihan1]> DESC mahasiswa;
+	+--------+-------------+------+-----+---------+-------+
+	| Field  | Type        | Null | Key | Default | Extra |
+	+--------+-------------+------+-----+---------+-------+
+	| nama   | varchar(15) | YES  |     | NULL    |       |
+	| nim    | int(30)     | YES  |     | NULL    |       |
+	| alamat | varchar(30) | YES  |     | NULL    |       |
+	+--------+-------------+------+-----+---------+-------+
+	3 rows in set (0.03 sec)
+
+- Menambahkan index atau key
+- Gunakan perintah ALTER TABLE [nama_tabel] ADD PRIMARY KEY (nama_field); 
+- Cek kembali dengan perintah DESC [nama_tabel];
+
+	MariaDB [latihan1]> ALTER TABLE mahasiswa ADD PRIMARY KEY(nim);
+	Query OK, 0 rows affected (0.75 sec)
+	Records: 0  Duplicates: 0  Warnings: 0
+
+	MariaDB [latihan1]> DESC mahasiswa;
+	+--------+-------------+------+-----+---------+-------+
+	| Field  | Type        | Null | Key | Default | Extra |
+	+--------+-------------+------+-----+---------+-------+
+	| nama   | varchar(15) | YES  |     | NULL    |       |
+	| nim    | int(30)     | NO   | PRI | NULL    |       |
+	| alamat | varchar(30) | YES  |     | NULL    |       |
+	+--------+-------------+------+-----+---------+-------+
+	3 rows in set (0.03 sec)

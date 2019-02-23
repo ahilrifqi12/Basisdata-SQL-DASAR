@@ -1,0 +1,186 @@
+﻿DML (Data Manipulation Language)
+DML (Data Manipulation Language) yakni kumpulan perintah query yang digunakan untuk memanipulasi data dalam tabel.
+
+- Masuk ke cmd dan masuk ke MySQL
+
+	C:\Users\USER>cd /xampp/mysql/bin
+
+	C:\xampp\mysql\bin>mysql -u root
+	Welcome to the MariaDB monitor.  Commands end with ; or \g.
+	Your MariaDB connection id is 3
+	Server version: 10.1.36-MariaDB mariadb.org binary distribution
+	
+	Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+	Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+- Masuk ke database yang sudah dibuat dengan perintah "USE <nama_database>;"
+- Buat DATABASE dan TABEL
+
+	MariaDB [(none)]> USE latihan1;
+	Database changed
+
+	MariaDB [latihan1]> CREATE TABLE Mahasiswa1(NIM INT(15), 
+	Nama VARCHAR(20), AlamatJalan VARCHAR(25), 
+	Kota VARCHAR(10), 
+	KodePos INT(8), 
+	noHP VARCHAR(15), 
+	JenisKelamin VARCHAR(10), 
+	TanggalLahir VARCHAR(11), 
+	KodeDosen INT(6));
+	Query OK, 0 rows affected (0.23 sec)
+
+MariaDB [latihan1]> DESC Mahasiswa1;
+	+--------------+-------------+------+-----+---------+-------+
+	| Field        | Type        | Null | Key | Default | Extra |
+	+--------------+-------------+------+-----+---------+-------+
+	| NIM          | int(15)     | YES  |     | NULL    |       |
+	| Nama         | varchar(20) | YES  |     | NULL    |       |
+	| AlamatJalan  | varchar(25) | YES  |     | NULL    |       |
+	| Kota         | varchar(10) | YES  |     | NULL    |       |
+	| KodePos      | int(8)      | YES  |     | NULL    |       |
+	| noHP         | varchar(15) | YES  |     | NULL    |       |
+	| JenisKelamin | varchar(10) | YES  |     | NULL    |       |
+	| TanggalLahir | varchar(11) | YES  |     | NULL    |       |
+	| KodeDosen    | int(6)      | YES  |     | NULL    |       |
+	+--------------+-------------+------+-----+---------+-------+
+	9 rows in set (0.04 sec)
+
+- Isi tabel dengan perintah INSERT INTO <table_name> (field1,...,fieldn)VALUE(value1,...,valuen);
+
+	MariaDB [latihan1]> INSERT INTO Mahasiswa1(NIM, Nama, AlamatJalan, Kota, KodePos, noHP, JenisKelamin, TanggalLahir, KodeDosen)
+	    -> VALUES ('11223344', 'Ari Santoso', 'Jl.Kenari', 'Bekasi', '13512', '0851234564', 'laki-laki', '1998-10-12', '10001'),
+	    -> ('11223345', 'Ario Talib', 'Jl.Mawar', 'Cikarang', '13513', '0851234565', 'laki-laki', '1999-11-16', '10002'),
+	    -> ('11223346', 'Dina Marlina', 'Jl.Melati', 'Karawang', '13514', '0851234566', 'perempuan', '1997-12-01', '10003'),
+	    -> ('11223347', 'Lisa Ayu', 'Jl.Anggrek', 'Bekasi', '13515', '0851234567', 'perempuan', '1996-01-02', '10004'),
+	    -> ('11223348', 'Tiara Wahidah', 'Jl.Merpati', 'Bekasi', '13516', '0851234568', 'perempuan', '1980-02-05', '10005'),
+	    -> ('11223349', 'Antoni Sinaga', 'Jl.Cendrawasih', 'Cikarang', '13517', '0851234569', 'laki-laki', '1988-03-10', '10006');
+	Query OK, 6 rows affected (0.78 sec)
+	Records: 6  Duplicates: 0  Warnings: 0
+
+- Cek dengan perintah "SELECT * FROM <table>;"
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1;
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan    | Kota     | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| 11223344 | Ari Santoso   | Jl.Kenari      | Bekasi   |   13512 | 0851234564 | laki-laki    | 1998-10-12   |     10001 |
+	| 11223345 | Ario Talib    | Jl.Mawar       | Cikarang |   13513 | 0851234565 | laki-laki    | 1999-11-16   |     10002 |
+	| 11223346 | Dina Marlina  | Jl.Melati      | Karawang |   13514 | 0851234566 | perempuan    | 1997-12-01   |     10003 |
+	| 11223347 | Lisa Ayu      | Jl.Anggrek     | Bekasi   |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati     | Bekasi   |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	| 11223349 | Antoni Sinaga | Jl.Cendrawasih | Cikarang |   13517 | 0851234569 | laki-laki    | 1988-03-10   |     10006 |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	6 rows in set (0.00 sec)
+
+-Mengubah data dengan perinah UPDATE <table> SET field1=value1, …, fieldn=valuen WHERE <kondisi>;
+
+	MariaDB [latihan1]> UPDATE Mahasiswa1 SET TanggalLahir='1979-08-31' WHERE NIM='11223344';
+	Query OK, 1 row affected (0.13 sec)
+	Rows matched: 1  Changed: 1  Warnings: 0
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1;
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan    | Kota     | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| 11223344 | Ari Santoso   | Jl.Kenari      | Bekasi   |   13512 | 0851234564 | laki-laki    | 1979-08-31   |     10001 |
+	| 11223345 | Ario Talib    | Jl.Mawar       | Cikarang |   13513 | 0851234565 | laki-laki    | 1999-11-16   |     10002 |
+	| 11223346 | Dina Marlina  | Jl.Melati      | Karawang |   13514 | 0851234566 | perempuan    | 1997-12-01   |     10003 |
+	| 11223347 | Lisa Ayu      | Jl.Anggrek     | Bekasi   |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati     | Bekasi   |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	| 11223349 | Antoni Sinaga | Jl.Cendrawasih | Cikarang |   13517 | 0851234569 | laki-laki    | 1988-03-10   |     10006 |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	6 rows in set (0.00 sec)
+
+- Menghapus data dengan perintah DELETE FROM <table_name> WHERE <kondisi>;
+
+	MariaDB [latihan1]> DELETE FROM Mahasiswa1 WHERE NIM='11223346';
+	Query OK, 1 row affected (0.11 sec)
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1;
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan    | Kota     | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| 11223344 | Ari Santoso   | Jl.Kenari      | Bekasi   |   13512 | 0851234564 | laki-laki    | 1979-08-31   |     10001 |
+	| 11223345 | Ario Talib    | Jl.Mawar       | Cikarang |   13513 | 0851234565 | laki-laki    | 1999-11-16   |     10002 |
+	| 11223347 | Lisa Ayu      | Jl.Anggrek     | Bekasi   |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati     | Bekasi   |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	| 11223349 | Antoni Sinaga | Jl.Cendrawasih | Cikarang |   13517 | 0851234569 | laki-laki    | 1988-03-10   |     10006 |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	5 rows in set (0.00 sec)
+
+- Menampilkan satu baris data dengan perintah SELECT [field1,...,fieldn] FROM <table> WHERE <kondisi>;
+
+	MariaDB [latihan1]> SELECT NIM, Nama, AlamatJalan, Kota, KodePos, noHP, JenisKelamin, TanggalLahir, KodeDosen FROM Mahasiswa1 WHERE NIM='11223344';
+	+----------+-------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama        | AlamatJalan | Kota   | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+-------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| 11223344 | Ari Santoso | Jl.Kenari   | Bekasi |   13512 | 0851234564 | laki-laki    | 1979-08-31   |     10001 |
+	+----------+-------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	1 row in set (0.06 sec)
+
+- Dengan perintah SELECT*FROM <table> WHERE <kondisi>;
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1 WHERE TanggalLahir>='1996-01-02';
+	+----------+------------+-------------+----------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama       | AlamatJalan | Kota     | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+------------+-------------+----------+---------+------------+--------------+--------------+-----------+
+	| 11223345 | Ario Talib | Jl.Mawar    | Cikarang |   13513 | 0851234565 | laki-laki    | 1999-11-16   |     10002 |
+	| 11223347 | Lisa Ayu   | Jl.Anggrek  | Bekasi   |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	+----------+------------+-------------+----------+---------+------------+--------------+--------------+-----------+
+	2 rows in set (0.00 sec)
+
+- Logika (AND) dengan perintah SELECT*FROM <table> WHERE <kondisi> AND/OR <kondisi>;
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1 WHERE Kota='Bekasi' AND JenisKelamin='perempuan';
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan | Kota   | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| 11223347 | Lisa Ayu      | Jl.Anggrek  | Bekasi |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati  | Bekasi |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	2 rows in set (0.04 sec)
+
+-Logika (AND) dan (OR) dengan perintah SELECT*FROM <table> WHERE <kondisi> AND <kondisi> OR <kondisi>;
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1 WHERE Kota='Bekasi' AND JenisKelamin='laki-laki' OR TanggalLahir<='1997-01-01' AND JenisKelamin='perempuan';
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan | Kota   | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	| 11223344 | Ari Santoso   | Jl.Kenari   | Bekasi |   13512 | 0851234564 | laki-laki    | 1979-08-31   |     10001 |
+	| 11223347 | Lisa Ayu      | Jl.Anggrek  | Bekasi |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati  | Bekasi |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	+----------+---------------+-------------+--------+---------+------------+--------------+--------------+-----------+
+	3 rows in set (0.00 sec)
+
+- Menampilkan baris dengan perintah SELECT [field1,..,fieldn] FROM <table>;
+
+	MariaDB [latihan1]> SELECT Nama, AlamatJalan FROM Mahasiswa1;
+	+---------------+----------------+
+	| Nama          | AlamatJalan    |
+	+---------------+----------------+
+	| Ari Santoso   | Jl.Kenari      |
+	| Ario Talib    | Jl.Mawar       |
+	| Lisa Ayu      | Jl.Anggrek     |
+	| Tiara Wahidah | Jl.Merpati     |
+	| Antoni Sinaga | Jl.Cendrawasih |
+	+---------------+----------------+
+	5 rows in set (0.00 sec)
+
+- Menampilkan data secara berurut dengan perintah SELECT*FROM <table> ORDER BY [field] ASC/DESC;
+
+	MariaDB [latihan1]> SELECT*FROM Mahasiswa1 ORDER BY Nama ASC;
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| NIM      | Nama          | AlamatJalan    | Kota     | KodePos | noHP       | JenisKelamin | TanggalLahir | KodeDosen |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	| 11223349 | Antoni Sinaga | Jl.Cendrawasih | Cikarang |   13517 | 0851234569 | laki-laki    | 1988-03-10   |     10006 |
+	| 11223344 | Ari Santoso   | Jl.Kenari      | Bekasi   |   13512 | 0851234564 | laki-laki    | 1979-08-31   |     10001 |
+	| 11223345 | Ario Talib    | Jl.Mawar       | Cikarang |   13513 | 0851234565 | laki-laki    | 1999-11-16   |     10002 |
+	| 11223347 | Lisa Ayu      | Jl.Anggrek     | Bekasi   |   13515 | 0851234567 | perempuan    | 1996-01-02   |     10004 |
+	| 11223348 | Tiara Wahidah | Jl.Merpati     | Bekasi   |   13516 | 0851234568 | perempuan    | 1980-02-05   |     10005 |
+	+----------+---------------+----------------+----------+---------+------------+--------------+--------------+-----------+
+	5 rows in set (0.03 sec)
+
+Perbedaan penggunaan operator >=  dan <= dengan BETWEEN.
+-	Operator >= hanya digunakan untuk menspesifikasikan syarat yang diajukan untuk dipenuhi.
+-	Sedangkan BETWEEN digunakan untuk menentukan lebar dari data yang ditampilkan.

@@ -1,0 +1,115 @@
+Penggunaan perintah operasi join pada tabel database.
+Operasi join digunakan untuk menggabungkan dua tabel atau lebih dengan hasil berupa gabungan dari kolom-kolom yang berasal dari tabel-tabel tersebut.
+
+- Masuk ke cmd dan msql
+- Buat database, 3 tabel dan isi tabel tersebut seperti materi pertama.
+- Hasil tabel pertama yaitu tabel mobil.
+
+	MariaDB [latihan14]> SELECT*FROM mobil;
+	+------+-------+-----------+---------+----------+
+	| kode | jenis | merk      | tarif   | nopol    |
+	+------+-------+-----------+---------+----------+
+	| M001 | SEDAN | BMW E5    | 500000  | BG1234AA |
+	| M002 | SEDAN | HONDA CRV | 350000  | BG2345BB |
+	| M003 | BUS   | MERCEDEZ  | 1000000 | BG3456CC |
+	| M004 | BUS   | DYNA      | 800000  | BG8433DD |
+	| M005 | TRUCK | HYNO ZX   | 1500000 | BG4638EE |
+	| M006 | TRUCK | DYNA X1   | 1500000 | BG8473FF |
+	+------+-------+-----------+---------+----------+
+	6 rows in set (0.00 sec)
+
+- Hasil tabel ke dua yaitu tabel pelanggan.
+
+	MariaDB [latihan14]> SELECT*FROM pelanggan;
+	+------+--------------+--------+------------------------+----------+---------+---------+
+	| kode | nama         | kontak | alamat                 | kota     | kodepos | telepon |
+	+------+--------------+--------+------------------------+----------+---------+---------+
+	| P001 | PT FOX RIVER | HENDRA | JL. JEND. SUDIRMAN 657 | BENGKULU |   30245 | 1234567 |
+	| P002 | CV FOXCON    | IWAN   | JL. WAHID HASYIM 743   | JAKARTA  |   73429 |  234567 |
+	| P003 | PT FARMACON  | YANI   | JL. AHMAD DAHLAN 45    | LAMPUNG  |   28349 | 3334445 |
+	+------+--------------+--------+------------------------+----------+---------+---------+
+	3 rows in set (0.00 sec)
+
+- Hasil tabel ke tiga yaitu tabel sewa.
+
+	MariaDB [latihan14]> SELECT*FROM sewa;
+	+--------------+---------------+------------+-----------+----------+----------+
+	| nofaktursewa | kodepelanggan | tglsewa    | kodemobil | lamasewa | uangmuka |
+	+--------------+---------------+------------+-----------+----------+----------+
+	| F001         | P001          | 2008-12-01 | M001      | 2        | 200000   |
+	| F001         | P001          | 2008-12-01 | M003      | 2        | 200000   |
+	| F003         | P002          | 2008-12-02 | M002      | 1        | 100000   |
+	+--------------+---------------+------------+-----------+----------+----------+
+	3 rows in set (0.00 sec)
+
+- Mengaplikasikan perintah join dengan perintah " SELECT <field> FROM table1
+  INNER JOIN | LEFT JOIN | RIGHT JOIN | LEFT OUTER JOIN | RIGHT OUTER JOIN | 
+  ON table1.key = table2.key; "
+
+- Cara untuk menampilkan kode, jenis, merk, nofaktursewa, tglsewa dan uangmuka.
+
+	MariaDB [latihan14]> SELECT
+    	-> mobil.kode,
+    	-> mobil.jenis,
+    	-> mobil.merk,
+    	-> sewa.nofaktursewa,
+    	-> sewa.tglsewa,
+    	-> sewa.uangmuka
+    	-> FROM mobil
+    	-> LEFT JOIN sewa ON mobil.kode = sewa.kodemobil;
+	+------+-------+-----------+--------------+------------+----------+
+	| kode | jenis | merk      | nofaktursewa | tglsewa    | uangmuka |
+	+------+-------+-----------+--------------+------------+----------+
+	| M001 | SEDAN | BMW E5    | F001         | 2008-12-01 | 200000   |
+	| M003 | BUS   | MERCEDEZ  | F001         | 2008-12-01 | 200000   |
+	| M002 | SEDAN | HONDA CRV | F003         | 2008-12-02 | 100000   |
+	| M004 | BUS   | DYNA      | NULL         | NULL       | NULL     |
+	| M005 | TRUCK | HYNO ZX   | NULL         | NULL       | NULL     |
+	| M006 | TRUCK | DYNA X1   | NULL         | NULL       | NULL     |
+	+------+-------+-----------+--------------+------------+----------+
+	6 rows in set (0.03 sec)
+
+- Cara untuk menampilkan nofaktursewa, nama, tglsewa, jenis, merk, lamasewa dan uangmuka.
+
+	MariaDB [latihan14]> SELECT
+   	 	-> sewa.nofaktursewa,
+    	-> pelanggan.nama,
+    	-> sewa.tglsewa,
+    	-> mobil.jenis,
+    	-> mobil.merk,
+    	-> sewa.lamasewa,
+    	-> sewa.uangmuka
+    	-> FROM sewa
+    	-> LEFT JOIN pelanggan ON sewa.kodepelanggan = pelanggan.kode
+    	-> LEFT JOIN mobil ON sewa.kodemobil = mobil.kode;
+	+--------------+--------------+------------+-------+-----------+----------+----------+
+	| nofaktursewa | nama         | tglsewa    | jenis | merk      | lamasewa | uangmuka |
+	+--------------+--------------+------------+-------+-----------+----------+----------+
+	| F001         | PT FOX RIVER | 2008-12-01 | SEDAN | BMW E5    | 2        | 200000   |
+	| F001         | PT FOX RIVER | 2008-12-01 | BUS   | MERCEDEZ  | 2        | 200000   |
+	| F003         | CV FOXCON    | 2008-12-02 | SEDAN | HONDA CRV | 1        | 100000   |
+	+--------------+--------------+------------+-------+-----------+----------+----------+
+	3 rows in set (0.00 sec)
+
+- Cara untuk menampilkan nama, kota, nofaktursewa, tglsewa, kodemobil, lamasewa dan uangmuka.
+
+	MariaDB [latihan14]> SELECT
+    	-> pelanggan.nama,
+    	-> pelanggan.kota,
+    	-> sewa.nofaktursewa,
+    	-> sewa.tglsewa,
+    	-> sewa.kodemobil,
+    	-> sewa.lamasewa,
+    	-> sewa.uangmuka
+    	-> FROM pelanggan
+    	-> LEFT JOIN sewa ON pelanggan.kode = sewa.kodepelanggan;
+	+--------------+----------+--------------+------------+-----------+----------+----------+
+	| nama         | kota     | nofaktursewa | tglsewa    | kodemobil | lamasewa | uangmuka |
+	+--------------+----------+--------------+------------+-----------+----------+----------+
+	| PT FOX RIVER | BENGKULU | F001         | 2008-12-01 | M001      | 2        | 200000   |
+	| PT FOX RIVER | BENGKULU | F001         | 2008-12-01 | M003      | 2        | 200000   |
+	| CV FOXCON    | JAKARTA  | F003         | 2008-12-02 | M002      | 1        | 100000   |
+	| PT FARMACON  | LAMPUNG  | NULL         | NULL       | NULL      | NULL     | NULL     |
+	+--------------+----------+--------------+------------+-----------+----------+----------+
+	4 rows in set (0.00 sec)
+

@@ -1,0 +1,211 @@
+Penggunaan filter query, alias, fungsi agregasi, klausa group by dan having.
+
+- Masuk ke cmd dan msql
+- Buat database, tabel dan isi tabel tersebut seperti materi pertama.
+- Hasil tabel pegawai :
+	
+	MariaDB [latihan13]> SELECT*FROM pegawai;
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------+
+	| id_pegawai | nama_depan | nama_belakang | email           | telepon    | tanggal_kontrak | id_job | gaji    | tunjangan |
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------+
+	| E001       | Ferry      | Gustiawan     | ferry@yahoo.com | 2147483647 | 2005-09-01      | L0001  | 2000000 | 500000    |
+	| E002       | Aris       | Ganiardi      | aris@yahoo.com  | 2147483647 | 2006-09-01      | L0002  | 2000000 | 200000    |
+	| E003       | Faiz       | Ahmad         | faiz@gmail.com  | 2147483647 | 2006-10-01      | L0003  | 1500000 | NULL      |
+	| E004       | Emma       | Bunton        | emma@gmail.com  | 2147483647 | 2006-10-01      | L0004  | 1500000 | 0         |
+	| E005       | Mike       | Scoff         | mike@plasa.com  | 2147483647 | 2007-09-01      | L0005  | 1250000 | 0         |
+	| E061       | Lincoln    | Burrous       | linc@yahoo.com  | 2147483647 | 2008-09-01      | L0006  | 1750000 | NULL      |
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------
+
+- Pertama saya akan mencoba menggunakan Filter query dengan menampilkan pegawai yang gajinya bukan 2.000.000 dan 1.250.000.
+
+	MariaDB [latihan13]> SELECT*FROM pegawai WHERE gaji<>'2000000' AND gaji<>'1250000';
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	| id_pegawai | nama_depan | nama_belakang | email          | telepon    | tanggal_kontrak | id_job | gaji    | tunjangan |
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	| E003       | Faiz       | Ahmad         | faiz@gmail.com | 2147483647 | 2006-10-01      | L0003  | 1500000 | NULL      |
+	| E004       | Emma       | Bunton        | emma@gmail.com | 2147483647 | 2006-10-01      | L0004  | 1500000 | 0         |
+	| E061       | Lincoln    | Burrous       | linc@yahoo.com | 2147483647 | 2008-09-01      | L0006  | 1750000 | NULL      |
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	3 rows in set (0.05 sec)
+
+- Lalu menampilkan pegawai dengan tunjangan "NULL".
+
+	MariaDB [latihan13]> SELECT*FROM pegawai WHERE tunjangan IS NULL;
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	| id_pegawai | nama_depan | nama_belakang | email          | telepon    | tanggal_kontrak | id_job | gaji    | tunjangan |
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	| E003       | Faiz       | Ahmad         | faiz@gmail.com | 2147483647 | 2006-10-01      | L0003  | 1500000 | NULL      |
+	| E061       | Lincoln    | Burrous       | linc@yahoo.com | 2147483647 | 2008-09-01      | L0006  | 1750000 | NULL      |
+	+------------+------------+---------------+----------------+------------+-----------------+--------+---------+-----------+
+	2 rows in set (0.00 sec)
+
+- Menampilkan pegawai dengan tunjangan selain "NULL.
+
+	MariaDB [latihan13]> SELECT*FROM pegawai WHERE tunjangan IS NOT NULL;
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------+
+	| id_pegawai | nama_depan | nama_belakang | email           | telepon    | tanggal_kontrak | id_job | gaji    | tunjangan |
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------+
+	| E001       | Ferry      | Gustiawan     | ferry@yahoo.com | 2147483647 | 2005-09-01      | L0001  | 2000000 | 500000    |
+	| E002       | Aris       | Ganiardi      | aris@yahoo.com  | 2147483647 | 2006-09-01      | L0002  | 2000000 | 200000    |
+	| E004       | Emma       | Bunton        | emma@gmail.com  | 2147483647 | 2006-10-01      | L0004  | 1500000 | 0         |
+	| E005       | Mike       | Scoff         | mike@plasa.com  | 2147483647 | 2007-09-01      | L0005  | 1250000 | 0         |
+	+------------+------------+---------------+-----------------+------------+-----------------+--------+---------+-----------+
+	4 rows in set (0.00 sec)
+
+- Menggunakan fungsi AGREGASI(COUNT, SUM, AVG, MIN, MAX) dan ALIAS.
+- Menampilkan jumlah baris tabel pegawai
+
+	MariaDB [latihan13]> SELECT COUNT(id_pegawai)AS jumlah FROM pegawai;
+	+--------+
+	| jumlah |
+	+--------+
+	|      6 |
+	+--------+
+	1 row in set (0.07 sec)
+
+- Menampilkan total gaji di tabel pegawai.
+
+	MariaDB [latihan13]> SELECT SUM(gaji)AS jumlah FROM pegawai;
+	+----------+
+	| jumlah   |
+	+----------+
+	| 10000000 |
+	+----------+
+
+- Menampilkan rata-rata gaji di tabel pegawai.
+
+	MariaDB [latihan13]> SELECT AVG(gaji)AS rerata FROM pegawai;
+	+--------------+
+	| rerata       |
+	+--------------+
+	| 1666666.6667 |
+	+--------------+
+	1 row in set (0.00 sec)
+
+- Menampilkan gaji terkecil di tabel.
+
+	MariaDB [latihan13]> SELECT MIN(gaji)AS termurah FROM pegawai;
+	+----------+
+	| termurah |
+	+----------+
+	|  1250000 |
+	+----------+
+	1 row in set (0.00 sec)
+
+-Menampilkan gaji termahal di tabel.
+
+	MariaDB [latihan13]> SELECT MAX(gaji)AS termahal FROM pegawai;
+	+----------+
+	| termahal |
+	+----------+
+	|  2000000 |
+	+----------+
+	1 row in set (0.00 sec)
+
+- Masuk ke tabel kedua yaitu tabel pet.
+
+	MariaDB [latihan13]> SELECT*FROM pet;
+	+----------+--------+---------+-------+------------+-------------+
+	| name     | owner  | species | sex   | birth      | death       |
+	+----------+--------+---------+-------+------------+-------------+
+	| Puffball | Diane  | Hamster | f     | 1999-03-03 | NULL        |
+	| Claws    | Gwen   | Cat     | m     | 1994-03-17 | NULL        |
+	| Fluffy   | Harold | Cat     | f     | 1993-02-04 | NULL        |
+	| Buffy    | Harold | Dog     | f     | 1989-05-13 | NULL        |	
+	| Fang     | Benny  | Dog     | m     | 1990-08-27 | NULL        |
+	| Bowser   | Diane  | Dog     | m     | 1989-08-31 | 1995-07-29  |
+	| Chirpy   | Gwen   | Bird    | f     | 1998-09-11 | NULL        |
+	| Whistler | Gwen   | Bird    | NULL  | 1997-12-09 | NULL        |
+	| Slim     | Benny  | Snake   | f     | 1996-04-29 | NULL        |
+	+----------+--------+---------+-------+------------+-------------+
+	9 rows in set (0.00 sec)
+
+- Penggunaan klausa GROUP BY
+- Menampilkan jumlah hewan yang dimiliki setiap owner.
+
+	MariaDB [latihan13]> SELECT owner, COUNT(name)AS jumlah FROM pet GROUP BY owner;
+	+--------+--------+
+	| owner  | jumlah |
+	+--------+--------+
+	| Benny  |      2 |
+	| Diane  |      2 |
+	| Gwen   |      3 |
+	| Harold |      2 |
+	+--------+--------+
+	4 rows in set (0.00 sec)
+
+- Menampilkan jumlah hewan berdasarkan species.
+
+	MariaDB [latihan13]> SELECT species, COUNT(name)AS jumlah FROM pet GROUP BY species;
+	+---------+--------+
+	| species | jumlah |
+	+---------+--------+
+	| Bird    |      2 |
+	| Cat     |      2 |
+	| Dog     |      3 |
+	| Hamster |      1 |
+	| Snake   |      1 |
+	+---------+--------+
+	5 rows in set (0.00 sec)
+
+- Menampilkan jumlah hewan berdasarkan jeniskelamin.
+
+	MariaDB [latihan13]> SELECT sex, COUNT(name)AS jumlah FROM pet GROUP BY sex;
+	+-------+--------+
+	| sex   | jumlah |
+	+-------+--------+
+	| f     |      1 |
+	| NULL  |      1 |
+	| f     |      1 |
+	| m     |      1 |
+	| f     |      1 |
+	| m     |      2 |
+	| f     |      1 |
+	| f     |      1 |
+	+-------+--------+
+	8 rows in set (0.00 sec)
+
+- Menampilkan jumlah hewan berdasarkan species dan jeniskelamin.
+
+	MariaDB [latihan13]> SELECT species, sex, COUNT(name)AS jumlah FROM pet GROUP BY species, sex;
+	+---------+-------+--------+
+	| species | sex   | jumlah |
+	+---------+-------+--------+
+	| bird    | NULL  |      1 |
+	| bird    | f     |      1 |
+	| cat     | f     |      1 |
+	| cat     | m     |      1 |
+	| dog     | f     |      1 |
+	| dog     | m     |      2 |
+	| hamster | f     |      1 |
+	| snake   | m     |      1 |
+	+---------+-------+--------+
+
+- Menampilkan jumlah hewan berdasarkan jenis kelamin yang diketahui saja.
+
+	MariaDB [latihan13]> SELECT sex, COUNT(name)AS jumlah FROM pet GROUP BY sex HAVING(sex)<>'NULL';
+	+------+--------+
+	| sex  | jumlah |
+	+------+--------+
+	| f    |      5 |
+	| m    |      3 |
+	+------+--------+
+	2 rows in set (0.00 sec)
+
+- Pengaplikasian perintah HAVING.
+- Menampilkan jumlah hewan berdasarkan species dan tanggal lahir kurang dari 1997-12-09.
+
+	MariaDB [latihan13]> SELECT species, birth, COUNT(name)AS jumlah FROM pet GROUP BY species, birth HAVING(birth)<='1997-12-09';
+	+---------+------------+--------+
+	| species | birth      | jumlah |
+	+---------+------------+--------+
+	| Bird    | 1997-12-09 |      1 |
+	| Cat     | 1993-02-04 |      1 |
+	| Cat     | 1994-03-17 |      1 |
+	| Dog     | 1989-05-13 |      1 |
+	| Dog     | 1989-08-31 |      1 |
+	| Dog     | 1990-08-27 |      1 |
+	| Snake   | 1996-04-29 |      1 |
+	+---------+------------+--------+
+	7 rows in set (0.00 sec)
+
